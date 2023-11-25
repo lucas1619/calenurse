@@ -31,9 +31,12 @@ router.post('/signup', async (req, res) => {
 
     try {
         const userRepository = myDataSource.getRepository(User);
-        const hashedPassword = await bcrypt.hash(password, process.env.SALT);
-        const user = await userRepository.save({ username, hashedPassword });
-        res.json({ user });
+        const userExists = await userRepository.findOne({ where: { username } });
+        if (userExists)
+            return res.status(409).json({ error: 'User already exists' });
+        const hashedPassword = await bcrypt.hash(password, parseInt(process.env.SALT));
+        await userRepository.save({ username, password: hashedPassword });
+        res.json({ message: 'User created successfully' });
     } catch (error) {
         res.status(400).json({ error: 'User creation failed' });
     }

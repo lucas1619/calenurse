@@ -4,7 +4,7 @@ import { Nurse } from "./nurse.entity";
 
 @Entity()
 export class Area {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn("uuid")
     id: UUID
 
     @Column()
