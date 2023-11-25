@@ -6,8 +6,12 @@ import { myDataSource } from "./app-data-source"
 // establish database connection
 myDataSource
     .initialize()
-    .then(() => {
+    .then((r) => {
         console.log("Data Source has been initialized!")
+        return r.synchronize()
+    })
+    .then((r) => {
+        console.log("Data Source has been synchronized!")
     })
     .catch((err) => {
         console.error("Error during Data Source initialization:", err)
