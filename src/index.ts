@@ -1,24 +1,40 @@
-import express, { Request, Response } from "express";
+import * as express from "express"
+import { Request, Response } from "express"
+import { User } from "./entity/user.entity"
+import { myDataSource } from "./app-data-source"
 
-// Import the connection object from ./database
-import connection from "./data/db";
+// establish database connection
+myDataSource
+    .initialize()
+    .then(() => {
+        console.log("Data Source has been initialized!")
+    })
+    .catch((err) => {
+        console.error("Error during Data Source initialization:", err)
+    })
 
-// Create a new Express application
-const app = express();
+// create and setup express app
+const app = express()
+app.use(express.json())
 
-// ...
+// register routes
+app.get("/users", async function (req: Request, res: Response) {
+    const users = await myDataSource.getRepository(User).find()
+    res.json(users)
+})
 
-// Define an asynchronous function to start the server and sync the database
-const start = async (): Promise<void> => {
-  try {
-    await connection.sync(); // Synchronizes the database with the defined models
-    app.listen(3000, () => { // Starts the server on port 3000
-      console.log("Server started on port 3000");
-    });
-  } catch (error) {
-    console.error(error); // Logs any errors that occur
-    process.exit(1); // Exits the process with an error status code
-  }
-};
 
-void start(); // Invokes the start function to start the server
+app.post("/users", async function (req: Request, res: Response) {
+    const user = await myDataSource.getRepository(User).create(req.body)
+    const results = await myDataSource.getRepository(User).save(user)
+    return res.send(results)
+})
+
+
+app.delete("/users/:id", async function (req: Request, res: Response) {
+    const results = await myDataSource.getRepository(User).delete(req.params.id)
+    return res.send(results)
+})
+
+// start express server
+app.listen(3000)
