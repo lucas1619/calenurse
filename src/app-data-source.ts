@@ -7,7 +7,7 @@ export const myDataSource = new DataSource({
     schema: "public",
     username: "postgres",
     password: "root",
-    database: "calenurse2",
+    database: "calenurse",
     entities: ["src/entity/*.ts"],
     migrations: ["migration/*.ts"],
     migrationsTableName: "migrations_typeorm",

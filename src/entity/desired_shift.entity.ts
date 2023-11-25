@@ -1,9 +1,10 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm"
 import { Nurse } from "./nurse.entity"
 import { UUID } from "typeorm/driver/mongodb/bson.typings"
-// create user entity, has one to one relationship with nurse
+import { Shift } from "../types/shift.enum"
+
 @Entity()
-export class User {
+export class DesiredShift {
     @PrimaryGeneratedColumn()
     id: UUID
 
@@ -12,8 +13,11 @@ export class User {
     nurse: Nurse
 
     @Column()
-    userName: string
+    date: Date
 
-    @Column()
-    password: string
+    @Column({
+        type: "enum",
+        enum: Shift
+    })
+    shift: Shift
 }
