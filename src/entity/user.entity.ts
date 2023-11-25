@@ -12,7 +12,7 @@ export class User {
     nurse: Nurse
 
     @Column()
-    userName: string
+    username: string
 
     @Column()
     password: string
