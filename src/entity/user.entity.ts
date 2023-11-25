@@ -4,7 +4,7 @@ import { UUID } from "typeorm/driver/mongodb/bson.typings"
 // create user entity, has one to one relationship with nurse
 @Entity()
 export class User {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn("uuid")
     id: UUID
 
     @OneToOne(() => Nurse)
@@ -12,7 +12,7 @@ export class User {
     nurse: Nurse
 
     @Column()
-    userName: string
+    username: string
 
     @Column()
     password: string

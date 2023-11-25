@@ -5,7 +5,7 @@ import { Shift } from "../types/shift.enum"
 
 @Entity()
 export class GeneratedShift {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn("uuid")
     id: UUID
 
     @OneToOne(() => Nurse)
