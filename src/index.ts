@@ -7,11 +7,11 @@ myDataSource
     .initialize()
     .then((r) => {
         console.log("Data Source has been initialized!")
-        return r.synchronize()
+        //return r.synchronize()
     })
-    .then((r) => {
+    /*.then((r) => {
         console.log("Data Source has been synchronized!")
-    })
+    })*/
     .catch((err) => {
         console.error("Error during Data Source initialization:", err)
     })

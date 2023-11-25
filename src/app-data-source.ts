@@ -14,5 +14,5 @@ export const myDataSource = new DataSource({
     migrations: ["src/migration/*.ts"],
     migrationsTableName: "migrations_typeorm",
     logging: true,
-    synchronize: true,
+    synchronize: false,
 });
