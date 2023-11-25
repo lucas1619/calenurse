@@ -40,7 +40,7 @@ router.post('/signup', async (req, res) => {
         const nurseRepository = myDataSource.getRepository(Nurse);
         const nurse = await nurseRepository.save({ name, age, email, isBoss });
         const hashedPassword = await bcrypt.hash(password, parseInt(process.env.SALT));
-        await userRepository.save({ username, password: hashedPassword, nurseId: nurse.id });
+        await userRepository.save({ username, password: hashedPassword, nurse });
         res.json({ message: 'User created successfully' });
     } catch (error) {
         res.status(400).json({ error: 'User creation failed' });

@@ -1,6 +1,7 @@
-import { Entity, Column, ManyToOne, JoinColumn, PrimaryGeneratedColumn, Unique } from "typeorm"
+import { Entity, Column, ManyToOne, JoinColumn, PrimaryGeneratedColumn, Unique, OneToOne } from "typeorm"
 import { UUID } from "typeorm/driver/mongodb/bson.typings"
 import { Area } from "./area.entity";
+import { User } from "./user.entity";
 
 @Entity()
 export class Nurse {
@@ -22,4 +23,7 @@ export class Nurse {
     @ManyToOne(() => Area, { eager: true })
     @JoinColumn({ name: 'areaId' })
     area: Area;
+
+    @OneToOne(() => User, user => user.nurse)
+    user: User;
 }
