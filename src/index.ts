@@ -1,4 +1,4 @@
-import * as express from "express"
+import express from "express"
 import { myDataSource } from "./app-data-source"
 import apiV1 from "./routes/v1"
 
