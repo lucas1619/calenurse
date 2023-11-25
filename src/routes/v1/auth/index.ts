@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express"
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import { myDataSource } from "../../../app-data-source";
 import { User } from "../../../entity/user.entity";
 import { config } from 'dotenv';
@@ -16,8 +17,10 @@ router.post('/login', async (req: Request, res: Response) => {
         const user = await userRepository.findOne({ where: { username } });
         if (user) {
             const isPasswordValid = await bcrypt.compare(password, user.password);
-            if (isPasswordValid)
-                return res.json({ user });
+            if (isPasswordValid) {
+                const token = jwt.sign({ username: user.username }, process.env.JWT_SECRET, { expiresIn: '24h' });
+                return res.json({ token });
+            }
             return res.status(401).json({ error: 'Invalid credentials' });
         } 
         return res.status(404).json({ error: 'User not found' });
