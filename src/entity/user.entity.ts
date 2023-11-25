@@ -1,19 +1,20 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, Index } from "typeorm"
 import { Nurse } from "./nurse.entity"
 import { UUID } from "typeorm/driver/mongodb/bson.typings"
-// create user entity, has one to one relationship with nurse
+
 @Entity()
 export class User {
     @PrimaryGeneratedColumn("uuid")
     id: UUID
 
     @OneToOne(() => Nurse)
-    @JoinColumn()    
+    @JoinColumn({ name: 'nurseId' })
     nurse: Nurse
 
-    @Column()
+    @Column({ nullable: false, unique: true })
+    @Index("idx_username_hash", { unique: true })
     username: string
 
-    @Column()
+    @Column({ nullable: false })
     password: string
 }

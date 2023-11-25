@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, Index } from "typeorm"
 import { Nurse } from "./nurse.entity"
 import { UUID } from "typeorm/driver/mongodb/bson.typings"
 import { Shift } from "../types/shift.enum"
@@ -12,12 +12,13 @@ export class GeneratedShift {
     @JoinColumn()    
     nurse: Nurse
 
-    @Column()
+    @Column({ nullable: false })
     date: Date
 
     @Column({
         type: "enum",
-        enum: Shift
+        enum: Shift,
+        nullable: false
     })
     shift: Shift
 }

@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, JoinColumn, PrimaryGeneratedColumn } from "typeorm"
+import { Entity, Column, ManyToOne, JoinColumn, PrimaryGeneratedColumn, Unique } from "typeorm"
 import { UUID } from "typeorm/driver/mongodb/bson.typings"
 import { Area } from "./area.entity";
 
@@ -7,16 +7,16 @@ export class Nurse {
     @PrimaryGeneratedColumn("uuid")
     id: UUID
 
-    @Column()
+    @Column({ nullable: false })
     name: string
 
-    @Column()
+    @Column({ nullable: true })
     age: number
 
-    @Column()
+    @Column({ nullable: false, unique: true})
     email: string
 
-    @Column()
+    @Column({ nullable: false, default: false })
     isBoss: boolean
 
     @ManyToOne(() => Area, { eager: true })

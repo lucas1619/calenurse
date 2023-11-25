@@ -12,12 +12,13 @@ export class DesiredShift {
     @JoinColumn()    
     nurse: Nurse
 
-    @Column()
+    @Column({ nullable: false })
     date: Date
 
     @Column({
         type: "enum",
-        enum: Shift
+        enum: Shift,
+        nullable: false
     })
     shift: Shift
 }
