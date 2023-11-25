@@ -9,7 +9,7 @@ export const myDataSource = new DataSource({
     port: parseInt(process.env.DB_PORT) || 5432,
     username: process.env.DB_USERNAME || 'postgres',
     password: process.env.DB_PASSWORD || 'root',
-    database: process.env.DB_DATABASE || 'calenurse',
+    database: process.env.DB_DATABASE || 'calenurse2',
     entities: ["./entity/*.ts"],
     migrations: ["./migration/*.ts"],
     migrationsTableName: "migrations_typeorm",
