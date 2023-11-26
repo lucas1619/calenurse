@@ -21,11 +21,11 @@ router.post('/login', async (req: Request, res: Response) => {
                 const token = jwt.sign({ username: user.id }, process.env.JWT_SECRET, { expiresIn: '24h' });
                 return res.json({ token });
             }
-            return res.status(401).json({ error: 'Invalid credentials' });
+            return res.status(401).json({ message: 'Invalid credentials' });
         } 
-        return res.status(404).json({ error: 'User not found' });
+        return res.status(404).json({ message: 'User not found' });
     } catch (error) {
-        return res.status(500).json({ error: 'Internal server error' });
+        return res.status(500).json({ message: 'Internal server error' });
     }
 });
 
@@ -36,18 +36,18 @@ router.post('/signup', async (req: Request, res: Response) => {
         const userRepository = myDataSource.getRepository(User);
         const userExists = await userRepository.findOne({ where: { username } });
         if (userExists)
-            return res.status(409).json({ error: 'User already exists' });
+            return res.status(409).json({ message: 'User already exists' });
         const nurseRepository = myDataSource.getRepository(Nurse);
         const areaRepository = myDataSource.getRepository(Area);
         const area = await areaRepository.findOne({ where: { id: areaId } });
         if (!area)
-            return res.status(404).json({ error: 'Area not found' });
+            return res.status(404).json({ message: 'Area not found' });
         const nurse = await nurseRepository.save({ name, age, email, isBoss, area });
         const hashedPassword = await bcrypt.hash(password, parseInt(process.env.SALT));
         await userRepository.save({ username, password: hashedPassword, nurse });
-        res.json({ message: 'User created successfully' });
+        res.status(201).json({ message: 'User created successfully' });
     } catch (error) {
-        res.status(400).json({ error: 'User creation failed' });
+        res.status(400).json({ message: 'User creation failed' });
     }
 });
 
