@@ -8,8 +8,8 @@ export class GeneratedShift {
     @PrimaryGeneratedColumn("uuid")
     id: UUID
 
-    @OneToOne(() => Nurse)
-    @JoinColumn()    
+    @OneToOne(() => Nurse, { nullable: false })
+    @JoinColumn({ name: "nurseId" })    
     nurse: Nurse
 
     @Column({ nullable: false })

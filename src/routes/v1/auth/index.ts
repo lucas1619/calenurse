@@ -3,11 +3,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { myDataSource } from "../../../app-data-source";
 import { Area, User, Nurse } from "../../../entity";
-import { config } from 'dotenv';
 
 const router = express.Router();
-
-config();
 
 router.post('/login', async (req: Request, res: Response) => {
     const { username, password } = req.body;
@@ -39,7 +36,7 @@ router.post('/signup', async (req: Request, res: Response) => {
             return res.status(409).json({ message: 'User already exists' });
         const nurseRepository = myDataSource.getRepository(Nurse);
         const areaRepository = myDataSource.getRepository(Area);
-        const area = await areaRepository.findOne({ where: { id: areaId } });
+        const area = await areaRepository.findOneBy({ id: areaId });
         if (!area)
             return res.status(404).json({ message: 'Area not found' });
         const nurse = await nurseRepository.save({ name, age, email, isBoss, area });
