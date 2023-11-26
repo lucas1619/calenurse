@@ -20,7 +20,7 @@ export class Nurse {
     @Column({ nullable: false, default: false })
     isBoss: boolean
 
-    @ManyToOne(() => Area, { eager: true })
+    @ManyToOne(() => Area, { eager: true, nullable: false })
     @JoinColumn({ name: 'areaId' })
     area: Area;
 
