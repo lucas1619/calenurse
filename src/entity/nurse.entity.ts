@@ -1,7 +1,8 @@
-import { Entity, Column, ManyToOne, JoinColumn, PrimaryGeneratedColumn, Unique, OneToOne } from "typeorm"
+import { Entity, Column, ManyToOne, JoinColumn, PrimaryGeneratedColumn, Unique, OneToOne, OneToMany } from "typeorm"
 import { UUID } from "typeorm/driver/mongodb/bson.typings"
 import { Area } from "./area.entity";
 import { User } from "./user.entity";
+import { DesiredShift } from "./desired_shift.entity";
 
 @Entity()
 export class Nurse {
@@ -26,4 +27,7 @@ export class Nurse {
 
     @OneToOne(() => User, user => user.nurse)
     user: User;
+
+    @OneToMany(() => DesiredShift, desiredShift => desiredShift.nurse)
+    desiredShifts: DesiredShift[];
 }

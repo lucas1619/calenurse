@@ -13,10 +13,19 @@ router.post("/register", checkAuthHeader, async (req: CustomRequest, res: Respon
         const { date, shift } = req.body;
         const [month, day, year] = date.split('/');
         const parsedDate = new Date(`${year}-${month}-${day}`);
-        parsedDate.setHours(0, 0, 0, 0);
+        // funciona
+        parsedDate.setHours(parsedDate.getHours() + 5);    
         const desiredShiftRepository = myDataSource.getRepository(DesiredShift);
         const nurseRepository = myDataSource.getRepository(Nurse);
         const nurse = await nurseRepository.findOneBy({ id: Equal(req.nurseId) });
+        const existingShift = await desiredShiftRepository.findOne({
+            where: {
+                nurse: Equal(nurse.id),
+                date: parsedDate,
+            },
+        });
+        if (existingShift)
+            return res.status(409).json({ message: "Desired shift already exists" });
         await desiredShiftRepository.save({ date: parsedDate, shift, nurse });
         res.status(201).json({ message: "Desired shift registered successfully" });
     } catch (error) {

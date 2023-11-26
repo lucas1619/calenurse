@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, ManyToOne, BeforeInsert, BeforeUpdate } from "typeorm"
 import { Nurse } from "./nurse.entity"
 import { UUID } from "typeorm/driver/mongodb/bson.typings"
 import { Shift } from "../types/shift.enum"
@@ -8,8 +8,8 @@ export class DesiredShift {
     @PrimaryGeneratedColumn("uuid")
     id: UUID
 
-    @OneToOne(() => Nurse, { nullable: false })
-    @JoinColumn({ name: "nurseId" })    
+    @ManyToOne(() => Nurse, { nullable: false })
+    @JoinColumn({ name: "nurseId" })
     nurse: Nurse
 
     @Column({ nullable: false })
