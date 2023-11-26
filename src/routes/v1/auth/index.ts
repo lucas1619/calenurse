@@ -2,7 +2,7 @@ import express, { Request, Response } from "express"
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { myDataSource } from "../../../app-data-source";
-import { User, Nurse } from "../../../entity";
+import { Area, User, Nurse } from "../../../entity";
 import { config } from 'dotenv';
 
 const router = express.Router();
@@ -18,7 +18,7 @@ router.post('/login', async (req: Request, res: Response) => {
         if (user) {
             const isPasswordValid = await bcrypt.compare(password, user.password);
             if (isPasswordValid) {
-                const token = jwt.sign({ username: user.username }, process.env.JWT_SECRET, { expiresIn: '24h' });
+                const token = jwt.sign({ username: user.id }, process.env.JWT_SECRET, { expiresIn: '24h' });
                 return res.json({ token });
             }
             return res.status(401).json({ error: 'Invalid credentials' });
@@ -29,8 +29,8 @@ router.post('/login', async (req: Request, res: Response) => {
     }
 });
 
-router.post('/signup', async (req, res) => {
-    const { username, password, name, age, email, isBoss } = req.body;
+router.post('/signup', async (req: Request, res: Response) => {
+    const { username, password, name, age, email, isBoss, areaId } = req.body;
 
     try {
         const userRepository = myDataSource.getRepository(User);
@@ -38,7 +38,11 @@ router.post('/signup', async (req, res) => {
         if (userExists)
             return res.status(409).json({ error: 'User already exists' });
         const nurseRepository = myDataSource.getRepository(Nurse);
-        const nurse = await nurseRepository.save({ name, age, email, isBoss });
+        const areaRepository = myDataSource.getRepository(Area);
+        const area = await areaRepository.findOne({ where: { id: areaId } });
+        if (!area)
+            return res.status(404).json({ error: 'Area not found' });
+        const nurse = await nurseRepository.save({ name, age, email, isBoss, area });
         const hashedPassword = await bcrypt.hash(password, parseInt(process.env.SALT));
         await userRepository.save({ username, password: hashedPassword, nurse });
         res.json({ message: 'User created successfully' });

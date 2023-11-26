@@ -7,7 +7,7 @@ export class User {
     @PrimaryGeneratedColumn("uuid")
     id: UUID
 
-    @OneToOne(() => Nurse, { eager: true })
+    @OneToOne(() => Nurse, { eager: true, nullable: false })
     @JoinColumn({ name: 'nurseId' })
     nurse: Nurse
 
