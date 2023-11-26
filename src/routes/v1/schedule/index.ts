@@ -1,10 +1,13 @@
 import { Router } from "express";
 import { Request, Response } from "express";
-
 import { myDataSource } from "../../../app-data-source";
-
 import { DesiredShift } from "../../../entity/desired_shift.entity";
 import { Between } from "typeorm";
+import Excel from 'exceljs';
+import * as path from 'path';
+import fs from 'fs';
+
+
 
 const router = Router();
 
@@ -81,9 +84,34 @@ router.post("/make", async (req : Request, res : Response) => {
             excelRows.push(excelRow);
         }
 
-        res.status(200).json({ message: "success", data: excelRows });
+        const workbook = new Excel.Workbook();
+        const worksheet = workbook.addWorksheet('Caso 1_Turnos');
+        const worksheetColumns = [
+            { header: 'Enfermera', key: 'Enfermera', width: 10 },
+            { header: '1', key: '1'},
+            { header: '2', key: '2'},
+            { header: '3', key: '3'},
+            { header: '4', key: '4'},
+            { header: '5', key: '5'},
+            { header: '6', key: '6'},
+            { header: '7', key: '7'},
+        ];
+        worksheet.columns = worksheetColumns;
 
-    } catch (error) {
+        worksheet.addRows(excelRows);
+
+        const exportPath = path.resolve(__dirname,  `nurses-${area_id}-${new Date().getTime().toString()}.xlsx`);
+        await workbook.xlsx.writeFile(exportPath);
+        // sleep 5 seconds
+        await new Promise(resolve => setTimeout(resolve, 5000));
+
+        // delete file
+        //fs.unlinkSync(exportPath);                                                                                                                                  
+        
+
+        res.status(200).json({ message: "success", data: exportPath });                                                      
+
+    } catch (error) {                                                       
         if (error instanceof Error) {
             res.status(500).json({ message: "error", data: error.message });
             return
