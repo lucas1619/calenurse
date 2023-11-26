@@ -210,29 +210,24 @@ router.post("/make", async (req : Request, res : Response) => {
     }
 });
 
+router.get("/get-id-nurses", async (req : Request, res : Response) => {
+    try {
+        const nurseRepository = myDataSource.getRepository(Nurse);
+        const nurses = await nurseRepository.find();
+        const ids = [];
+        for(let i = 0; i < nurses.length; i++) {
+            ids.push(nurses[i].id);
+        }
+        res.status(200).json({ message: "success", data: ids });
+    } catch (error) {
+        res.status(500).json({ message: "error", data: error });
+    }
 
-router.get("/generate", async (req : Request, res : Response) => {
-    const identificadores = [
-        'e5ee3668-07bd-411b-8f75-5d4bb430adc4',
-        '79223ce6-d248-4cdd-9066-a0c1017c4a93',
-        'ecab6aea-beeb-4a58-917f-c58f6d7f919a',
-        '15d92ab7-42a1-4f92-a2d8-570c49518e11',
-        'a091ea9e-e3a1-4d76-b094-774d7d5d238f',
-        '1599b1fb-0e5e-4a56-9c20-7092fead6555',
-        '088db866-a331-4123-a39c-2b946e754e64',
-        '9dbbded0-0429-49fd-bf6c-4f2c97706a16',
-        '6e9b3d4b-317a-413f-a9e4-75babefb263f',
-        'c1d3d857-d974-481b-a622-743bf914a077',
-        '048f9710-63cf-4ea2-b9ed-07f309c9893a',
-        'd72e04ce-3c53-4551-a4df-5e33457cc4ea',
-        '04f71f0b-1866-4302-99b4-196054e3255f',
-        '92ba5567-c7d6-452c-982e-90290d981ab6',
-        '3903fc46-03f5-442e-a903-b683c24abed2',
-        '021d4f3e-389b-412a-8125-5c4ac956acca',
-        '16668c34-eb02-4fee-b5ae-cb6279cb93ee',
-        '474a4931-ee09-4889-b99b-7448172262b1',
-        '2db7a6f7-4618-4206-afd2-0a90e42627e8'
-    ];
+});
+
+
+router.post("/generate-desired-sfhifts", async (req : Request, res : Response) => {
+    const {identificadores} = req.body;
     const matrizEnfermeras = [
         [ 1, 3, 3, 3, 1, 0, 3, 2 ],
         [ 2, 1, 1, 1, 1, 3, 3, 0 ],
