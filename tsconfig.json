@@ -7,5 +7,6 @@
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
       "esModuleInterop": true,
+      "outDir": "./dist",
   }
 }
